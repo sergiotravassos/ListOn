@@ -16,12 +16,7 @@
         android:id="@+id/fragment_lista"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:name="com.sergiotravassos.liston.ListaCarroFragment"/>
 
-    <FrameLayout
-        android:id="@+id/detalhe"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#A9A9A9"/>
 </LinearLayout>

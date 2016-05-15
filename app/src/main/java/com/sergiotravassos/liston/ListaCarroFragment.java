@@ -14,7 +14,15 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+import butterknife.OnItemSelected;
+
 public class ListaCarroFragment extends Fragment {
+
+    @Bind(R.id.list_carro)
+    ListView mListView;
 
     List<Carro> mCarros;
 
@@ -34,26 +42,25 @@ public class ListaCarroFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_lista_carro, container, false);
+        ButterKnife.bind(this, layout);
 
-        ListView listView = (ListView) layout.findViewById(R.id.list_carro);
-        listView.setAdapter(new ArrayAdapter<Carro>(getActivity(), android.R.layout.simple_list_item_1, mCarros));
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Carro carro = mCarros.get(position);
-                if(getActivity() instanceof CliqueiNoCarroListener){
-                    CliqueiNoCarroListener listener = (CliqueiNoCarroListener)getActivity();
-                    listener.carroFoiClicado(carro);
-                }
-            }
-        });
-
+        mListView.setAdapter(new ArrayAdapter<Carro>
+                (getActivity(), android.R.layout.simple_list_item_1, mCarros));
         return layout;
 
     }
 
-   public interface CliqueiNoCarroListener{
+    @OnItemClick(R.id.list_carro)
+    void onItemClick(int position) {
+        Carro carro = mCarros.get(position);
+        if (getActivity() instanceof CliqueiNoCarroListener) {
+            CliqueiNoCarroListener listener = (CliqueiNoCarroListener) getActivity();
+            listener.carroFoiClicado(carro);
+        }
+    }
+
+
+    public interface CliqueiNoCarroListener {
         void carroFoiClicado(Carro carro);
     }
 
