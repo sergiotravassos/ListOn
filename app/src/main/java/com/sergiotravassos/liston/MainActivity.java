@@ -5,6 +5,8 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.sergiotravassos.liston.model.Carro;
+
 import org.parceler.Parcels;
 
 public class MainActivity extends AppCompatActivity

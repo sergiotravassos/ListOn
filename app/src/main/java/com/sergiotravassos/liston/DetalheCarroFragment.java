@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.sergiotravassos.liston.model.Carro;
 
 import org.parceler.Parcels;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class DetalheCarroFragment extends Fragment {
@@ -27,6 +27,7 @@ public class DetalheCarroFragment extends Fragment {
     private Carro mCarro;
 
     public static DetalheCarroFragment newInstance(Carro carro) {
+
         DetalheCarroFragment fragment = new DetalheCarroFragment();
         Bundle args = new Bundle();
         Parcelable p = Parcels.wrap(carro);
@@ -50,7 +51,7 @@ public class DetalheCarroFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detalhe_carro, container, false);
         ButterKnife.bind(this, view);
         mTextModelo.setText(mCarro.modelo);
-        mTextMontadora.setText(mCarro.montadora);
+        mTextMontadora.setText(mCarro.fabricante);
         return view;
     }
 
