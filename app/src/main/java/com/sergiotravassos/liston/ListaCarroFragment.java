@@ -29,9 +29,19 @@ public class ListaCarroFragment extends Fragment {
 
     @Bind(R.id.list_carro)
     ListView mListView;
+
     List<Carro> mCarros;
     ArrayAdapter<Carro> mAdapter;
+    CarroTask mTask;
 
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        mCarros = new ArrayList<>();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,11 +49,7 @@ public class ListaCarroFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_lista_carro, container, false);
         ButterKnife.bind(this, layout);
 
-        mCarros = new ArrayList<>();
-        mAdapter = new ArrayAdapter<>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                mCarros);
+        mAdapter = new CarroAdapter(getContext(), mCarros);
         mListView.setAdapter(mAdapter);
         return layout;
 
@@ -52,7 +58,10 @@ public class ListaCarroFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        new CarroTask().execute();
+        if(mCarros.size() == 0 && mTask == null) {
+            mTask = new CarroTask();
+            mTask.execute();
+        }
     }
 
     @OnItemClick(R.id.list_carro)
@@ -69,10 +78,10 @@ public class ListaCarroFragment extends Fragment {
         void carroFoiClicado(Carro carro);
     }
 
-    class CarroTask extends AsyncTask<Void, Void, Carro> {
+    class CarroTask extends AsyncTask<Void, Void, Carro[]> {
 
         @Override
-        protected Carro doInBackground(Void... params) {
+        protected Carro[] doInBackground(Void... params) {
 
             OkHttpClient client = new OkHttpClient();
 
@@ -86,9 +95,9 @@ public class ListaCarroFragment extends Fragment {
                 Log.d("Teste", jsonString);
 
                 Gson gson = new Gson();
-                Carro carro = gson.fromJson(jsonString, Carro.class);
+                Carro[] carros = gson.fromJson(jsonString, Carro[].class);
 
-                return carro;
+                return carros;
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -97,7 +106,7 @@ public class ListaCarroFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(Carro carros) {
+        protected void onPostExecute(Carro[] carros) {
             super.onPostExecute(carros);
 
             if(carros != null) {

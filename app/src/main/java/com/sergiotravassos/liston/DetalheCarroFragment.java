@@ -22,7 +22,7 @@ public class DetalheCarroFragment extends Fragment {
     private static final String EXTRA_CARRO = "param1";
 
     @Bind(R.id.text_modelo)  TextView mTextModelo;
-    @Bind(R.id.text_montadora) TextView mTextMontadora;
+    @Bind(R.id.text_fabricante) TextView mTextFabricante;
 
     private Carro mCarro;
 
@@ -51,7 +51,7 @@ public class DetalheCarroFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detalhe_carro, container, false);
         ButterKnife.bind(this, view);
         mTextModelo.setText(mCarro.modelo);
-        mTextMontadora.setText(mCarro.fabricante);
+        mTextFabricante.setText(mCarro.fabricante);
         return view;
     }
 
