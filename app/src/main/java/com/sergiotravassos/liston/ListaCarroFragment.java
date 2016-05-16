@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.sergiotravassos.liston.model.Carro;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -78,16 +79,17 @@ public class ListaCarroFragment extends Fragment {
         void carroFoiClicado(Carro carro);
     }
 
-    class CarroTask extends AsyncTask<Void, Void, Carro[]> {
+    class CarroTask extends AsyncTask<Void, Void, List<Carro>> {
 
         @Override
-        protected Carro[] doInBackground(Void... params) {
+        protected List<Carro> doInBackground(Void... params) {
 
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-                    .url("https://dl.dropboxusercontent.com/u/58682848/carros.json")
+                    .url("http://10.0.2.2:80/carros.json")
                     .build();
+            List<Carro> carros = null;
             try {
                 Response response = client.newCall(request).execute();
                 String jsonString = response.body().string();
@@ -95,26 +97,26 @@ public class ListaCarroFragment extends Fragment {
                 Log.d("Teste", jsonString);
 
                 Gson gson = new Gson();
-                Carro[] carros = gson.fromJson(jsonString, Carro[].class);
+                carros = Arrays.asList(gson.fromJson(jsonString, Carro[].class));
 
                 return carros;
 
             }catch (Exception e){
                 e.printStackTrace();
             }
-            return null;
+            return carros;
         }
 
         @Override
-        protected void onPostExecute(Carro[] carros) {
+        protected void onPostExecute(List<Carro> carros) {
             super.onPostExecute(carros);
 
             if(carros != null) {
                 mCarros.clear();
 
-                for (Carro carro : mCarros) {
-                    mCarros.add(carro);
-                }
+
+                    mCarros = carros;
+
                 mAdapter.notifyDataSetChanged();
             }
 
