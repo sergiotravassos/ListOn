@@ -74,11 +74,6 @@ public class ListaCarroFragment extends Fragment {
         }
     }
 
-
-    public interface CliqueiNoCarroListener {
-        void carroFoiClicado(Carro carro);
-    }
-
     class CarroTask extends AsyncTask<Void, Void, List<Carro>> {
 
         @Override

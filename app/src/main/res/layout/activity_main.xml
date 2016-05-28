@@ -6,11 +6,9 @@
     android:orientation="vertical"
     tools:context="com.sergiotravassos.liston.MainActivity">
 
-    <fragment
-        android:id="@+id/fragment_lista"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:name="com.sergiotravassos.liston.ListaCarroFragment"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
