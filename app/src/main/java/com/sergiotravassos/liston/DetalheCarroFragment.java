@@ -1,13 +1,21 @@
 package com.sergiotravassos.liston;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -41,6 +49,8 @@ public class DetalheCarroFragment extends Fragment {
     @Bind(R.id.fab_favorito)
     FloatingActionButton mFabFavorito;
 
+    private ShareActionProvider mShareActionProvider;
+
     CarroDAO mDAO;
 
     private Carro mCarro;
@@ -59,6 +69,7 @@ public class DetalheCarroFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         mDAO = new CarroDAO(getActivity());
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             Parcelable p = getArguments().getParcelable(EXTRA_CARRO);
             mCarro = Parcels.unwrap(p);
@@ -77,6 +88,19 @@ public class DetalheCarroFragment extends Fragment {
         Glide.with(getActivity()).load(mCarro.imagem).into(mImageCapa);
         toggleFavorito();
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_detalhe, menu);
+        MenuItem item = menu.findItem(R.id.meu_item_share);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+        Intent it = new Intent(Intent.ACTION_SEND);
+        it.putExtra(Intent.EXTRA_TEXT, mCarro.modelo);
+        it.setType("text/plain");
+        mShareActionProvider.setShareIntent(it);
     }
 
     private void toggleFavorito(){
@@ -101,7 +125,20 @@ public class DetalheCarroFragment extends Fragment {
         }else{
             mDAO.inserir(mCarro);
         }
-        toggleFavorito();
+        mFabFavorito.animate()
+                .scaleX(0)
+                .scaleY(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        toggleFavorito();
+                        mFabFavorito.animate()
+                                .scaleX(1)
+                                .scaleY(1)
+                                .setListener(null);
+                    }
+                });
         ((CarroApp)getActivity().getApplication()).getEventBus().post(mCarro);
     }
 }

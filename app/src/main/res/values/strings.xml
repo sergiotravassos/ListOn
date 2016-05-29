@@ -7,4 +7,9 @@
 
     <string name="formato_ano">Ano Fabric.: %1$d</string>
     <string name="formato_motor">Motor: %1$d</string>
+
+    <string name="compartilhar">Compartilhar</string>
+
+    <string name="erro_conexao">Sem conexão</string>
+    <string name="lista_vazia">Sem dados para exibição</string>
 </resources>

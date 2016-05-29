@@ -25,6 +25,9 @@ public class ListaFavoritoFragment extends Fragment {
 
     @Bind(R.id.list_carro)
     ListView mListView;
+    @Bind(R.id.empty)
+    View mEmpty;
+
 
     List<Carro> mCarros;
     ArrayAdapter<Carro> mAdapter;
@@ -52,6 +55,9 @@ public class ListaFavoritoFragment extends Fragment {
         ButterKnife.bind(this, layout);
 
         mAdapter = new CarroAdapter(getContext(), mCarros);
+
+        mListView.setEmptyView(mEmpty);
+
         mListView.setAdapter(mAdapter);
         return layout;
 
