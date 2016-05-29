@@ -3,4 +3,8 @@
 
     <string name="aba_web">Web</string>
     <string name="aba_favoritos">Favoritos</string>
+    <string name="detalhe_activity_carro">Detalhes do Carro</string>
+
+    <string name="formato_ano">Ano Fabric.: %1$d</string>
+    <string name="formato_motor">Motor: %1$d</string>
 </resources>

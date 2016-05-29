@@ -1,8 +1,11 @@
 package com.sergiotravassos.liston;
 
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +32,14 @@ public class DetalheCarroFragment extends Fragment {
     TextView mTextModelo;
     @Bind(R.id.text_fabricante)
     TextView mTextFabricante;
+    @Bind(R.id.text_ano)
+    TextView mTextAno;
+    @Bind(R.id.text_motor)
+    TextView mTextMotor;
     @Bind(R.id.img_capa)
     ImageView mImageCapa;
+    @Bind(R.id.fab_favorito)
+    FloatingActionButton mFabFavorito;
 
     CarroDAO mDAO;
 
@@ -63,8 +72,20 @@ public class DetalheCarroFragment extends Fragment {
         ButterKnife.bind(this, view);
         mTextModelo.setText(mCarro.modelo);
         mTextFabricante.setText(mCarro.fabricante);
+        mTextAno.setText(mCarro.ano);
+        mTextMotor.setText(mCarro.motor);
         Glide.with(getActivity()).load(mCarro.imagem).into(mImageCapa);
+        toggleFavorito();
         return view;
+    }
+
+    private void toggleFavorito(){
+        boolean favorito = mDAO.isFavorito(mCarro);
+
+        mFabFavorito.setImageResource(
+                favorito ? R.drawable.ic_remove : R.drawable.ic_check);
+        mFabFavorito.setBackgroundTintList(
+                favorito ? ColorStateList.valueOf(Color.RED) : ColorStateList.valueOf(Color.GREEN));
     }
 
     @Override
@@ -80,7 +101,7 @@ public class DetalheCarroFragment extends Fragment {
         }else{
             mDAO.inserir(mCarro);
         }
-
+        toggleFavorito();
         ((CarroApp)getActivity().getApplication()).getEventBus().post(mCarro);
     }
 }

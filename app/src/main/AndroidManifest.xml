@@ -12,14 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoTitle">
+            android:theme="@style/AppTheme.NoTitle"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetalheCarroActivity"></activity>
+        <activity android:name=".DetalheCarroActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/detalhe_activity_carro">
+            <meta-data android:name="parentActivityName" android:value=".MainActivity"/>
+        </activity>
     </application>
 
 </manifest>
