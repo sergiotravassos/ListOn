@@ -13,6 +13,8 @@ import android.widget.ListView;
 import com.sergiotravassos.liston.database.CarroDAO;
 import com.sergiotravassos.liston.model.Carro;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -34,6 +36,13 @@ public class ListaFavoritoFragment extends Fragment {
         setRetainInstance(true);
         mDao = new CarroDAO(getActivity());
         mCarros = mDao.listar();
+        ((CarroApp)getActivity().getApplication()).getEventBus().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((CarroApp)getActivity().getApplication()).getEventBus().unregister(this);
     }
 
     @Override
@@ -55,6 +64,13 @@ public class ListaFavoritoFragment extends Fragment {
             CliqueiNoCarroListener listener = (CliqueiNoCarroListener) getActivity();
             listener.carroFoiClicado(carro);
         }
+    }
+
+    @Subscribe
+    public void atualizar(Carro carro){
+        mCarros.clear();
+        mCarros.addAll(mDao.listar());
+        mAdapter.notifyDataSetChanged();
     }
 
 }
