@@ -54,7 +54,7 @@ public class CarroDAO {
 
     }
 
-    public List<Carro> listar(){
+    public ArrayList<Carro> listar(){
 
         SQLiteDatabase db = carroDbHelper.getReadableDatabase();
 
@@ -67,7 +67,7 @@ public class CarroDAO {
         int idx_motor = cursor.getColumnIndex(CarroHelper.COL_MOTOR);
         int idx_imagem = cursor.getColumnIndex(CarroHelper.COL_IMAGEM);
 
-        List<Carro> carros = new ArrayList<Carro>();
+        ArrayList<Carro> carros = new ArrayList<Carro>();
 
         while (cursor.moveToNext()){
             String modelo = cursor.getString(idx_modelo);

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.sergiotravassos.liston.model.Carro;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -21,7 +22,7 @@ import butterknife.ButterKnife;
  */
 public class CarroAdapter extends ArrayAdapter<Carro> {
 
-    public CarroAdapter(Context context, List<Carro> carros) {
+    public CarroAdapter(Context context, ArrayList<Carro> carros) {
         super(context, 0, carros);
     }
 

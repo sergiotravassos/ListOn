@@ -15,6 +15,7 @@ import com.sergiotravassos.liston.model.Carro;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -29,7 +30,7 @@ public class ListaFavoritoFragment extends Fragment {
     View mEmpty;
 
 
-    List<Carro> mCarros;
+    ArrayList<Carro> mCarros;
     ArrayAdapter<Carro> mAdapter;
     CarroDAO mDao;
 

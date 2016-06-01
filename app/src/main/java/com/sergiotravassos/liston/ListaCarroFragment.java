@@ -18,10 +18,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sergiotravassos.liston.model.Carro;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -40,10 +40,9 @@ public class ListaCarroFragment extends Fragment {
     @Bind(R.id.empty)
     View mEmpty;
 
-    List<Carro> mCarros;
-    ArrayAdapter<Carro> mAdapter;
+    ArrayList<Carro> mCarros;
+    CarroAdapter mAdapter;
     CarroTask mTask;
-
 
 
     @Override
@@ -65,6 +64,7 @@ public class ListaCarroFragment extends Fragment {
 
         mListView.setAdapter(mAdapter);
 
+
         mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -77,9 +77,9 @@ public class ListaCarroFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(mCarros.size() == 0 && mTask == null) {
+        if (mCarros.size() == 0 && mTask == null) {
             baixarJson();
-        }else if (mTask != null && mTask.getStatus() == AsyncTask.Status.RUNNING){
+        } else if (mTask != null && mTask.getStatus() == AsyncTask.Status.RUNNING) {
             showProgress();
         }
     }
@@ -91,13 +91,13 @@ public class ListaCarroFragment extends Fragment {
         if (info != null && info.isConnected()) {
             mTask = new CarroTask();
             mTask.execute();
-        }else{
+        } else {
             mSwipe.setRefreshing(false);
-            Toast.makeText(getActivity(),R.string.erro_conexao, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.erro_conexao, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void showProgress(){
+    private void showProgress() {
         mSwipe.post(new Runnable() {
             @Override
             public void run() {
@@ -115,7 +115,7 @@ public class ListaCarroFragment extends Fragment {
         }
     }
 
-    class CarroTask extends AsyncTask<Void, Void, List<Carro>> {
+    class CarroTask extends AsyncTask<Void, Void, ArrayList<Carro>> {
 
         @Override
         protected void onPreExecute() {
@@ -124,7 +124,7 @@ public class ListaCarroFragment extends Fragment {
         }
 
         @Override
-        protected List<Carro> doInBackground(Void... params) {
+        protected ArrayList<Carro> doInBackground(Void... params) {
 
             OkHttpClient client = new OkHttpClient();
 
@@ -132,39 +132,41 @@ public class ListaCarroFragment extends Fragment {
                     //http://10.0.2.2:80/carros.json
                     .url("https://dl.dropboxusercontent.com/u/58682848/carros.json")
                     .build();
-            List<Carro> carros = null;
+            ArrayList<Carro> carros = null;
             try {
-                Thread.sleep(5000);
+               // Thread.sleep(5000);
                 Response response = client.newCall(request).execute();
                 String jsonString = response.body().string();
 
                 Log.d("Teste", jsonString);
 
                 Gson gson = new Gson();
-                carros = Arrays.asList(gson.fromJson(jsonString, Carro[].class));
+                carros = gson.fromJson(jsonString, new TypeToken<List<Carro>>() {
+                }.getType());
 
                 return carros;
 
-            }catch (Exception e){
-                e.printStackTrace();
+            } catch (Exception e) {
+                Log.e("Error doInBackground", e.getMessage());
             }
             return carros;
         }
 
         @Override
-        protected void onPostExecute(List<Carro> carros) {
+        protected void onPostExecute(ArrayList<Carro> carros) {
             super.onPostExecute(carros);
 
-            if(carros != null) {
-                mCarros.clear();
+            if (carros != null) {
+                mCarros = new ArrayList<>();
                 mCarros = carros;
-                mAdapter.notifyDataSetChanged();
 
-                if(getResources().getBoolean(R.bool.tablet) && mCarros.size() > 0){
+                if (getResources().getBoolean(R.bool.tablet) && mCarros.size() > 0) {
                     onItemClick(0);
                 }
             }
             mSwipe.setRefreshing(false);
+            mAdapter.notifyDataSetChanged();
+
 
         }
     }
